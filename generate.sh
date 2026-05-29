@@ -22,14 +22,19 @@ prompt() {
 	printf "%s" "$REPLY"
 }
 
-PACKAGE=$(prompt "npm package (e.g. @vendor/mcp-server)")
+PACKAGE=$(prompt "npm package (e.g. @vendor/mcp-server or @vendor/mcp-server@1.2.3 to pin)")
 if [ -z "$PACKAGE" ]; then
 	echo "package required" >&2
 	exit 1
 fi
 
-# derive a default name from the package: strip leading @, replace / with -
-DEFAULT_NAME=$(printf "%s" "$PACKAGE" | sed 's|^@||' | tr '/' '-')
+# derive a default name from the package spec: strip leading @ (scope marker),
+# drop any @version suffix, then replace / with -.
+# Examples:
+#   @vendor/mcp           -> vendor-mcp
+#   @vendor/mcp@1.2.3     -> vendor-mcp
+#   pkg@^1.0.0            -> pkg
+DEFAULT_NAME=$(printf "%s" "$PACKAGE" | sed -e 's|^@||' -e 's|@.*||' | tr '/' '-')
 NAME=$(prompt "server name (used in config + folder)" "$DEFAULT_NAME")
 
 echo "Env vars to inject (one per line, blank line to finish):" >&2

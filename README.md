@@ -43,7 +43,9 @@ cd mcp-runner-claude
 
 The script asks for:
 
-- **npm package** — the MCP server package, e.g. `@vendor/mcp-server`.
+- **npm package** — the MCP server package, e.g. `@vendor/mcp-server`. Add
+  a version suffix to pin: `@vendor/mcp-server@1.2.3` (also `@latest`, ranges
+  like `@^1.0.0`, etc — anything `npx` accepts).
 - **server name** — used as the key in `mcpServers` and the directory name.
   Defaults to the package with `@` stripped and `/` replaced by `-`.
 - **env vars** — one per prompt, blank line to finish. Supply as many as the
